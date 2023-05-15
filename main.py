@@ -46,7 +46,7 @@ def slice_notes(notes) -> dict:
     notes_dict = {}
     for note in notes:
         note_parts = note.split()
-        beat = int(note_parts[0])
+        beat = float(note_parts[0])
         # 如果字典内没有该时间位置
         if beat not in notes_dict:
             # 添加该音符到字典中
@@ -71,30 +71,36 @@ def play_note(note, duration) -> None:
 
 
 def play_melody(melody_dict) -> None:
-    """
-    播放旋律。
-    :param melody_dict: 旋律字典
-    :return: 无
-    """
-    current_beat = 0  # 当前拍数，从0开始
+    # 从第0拍开始播放
+    current_beat = float(0)
 
-    # 当前拍数小于等于最大拍数时，循环播放
+    # 播放到最后一个音符
     while current_beat <= max(melody_dict.keys()):
-        # 如果当前拍数在字典中，即为播放音符
+        note_duration = float(melody_dict[current_beat][1]) * beat_duration
+
         if current_beat in melody_dict:
             note_name = melody_dict[current_beat][0]
-            note_duration = float(melody_dict[current_beat][1]) * beat_duration
-            print("第" + str(current_beat) + "拍：播放音符 " + note_name + " 中，持续时间为 " + str(
-                note_duration) + " 秒。")
-            play_note(note_name, note_duration)
 
-        # 如果当前拍数不在字典中，即为暂停一整拍
+            # 如果占有音符名称位置的字符串为X，即暂停（通常为暂停半拍）
+            if note_name == "X":
+                print("第" + str(current_beat) + "拍：X暂停，持续时间为" + str(beat_duration) + " 秒。")
+                buzzer.freq(50000)
+                time.sleep(beat_duration)
+                current_beat += 1
+
+            else:
+                print("第" + str(current_beat) + "拍：播放音符 " + note_name + " 中，持续时间为 " + str(
+                    note_duration) + " 秒。")
+                play_note(note_name, note_duration)
+                current_beat += float(melody_dict[current_beat][1])
+                buzzer.freq(50000)
+
         else:
-            print("第" + str(current_beat) + "拍：暂停，持续时间为" + str(beat_duration) + " 秒。")
+            # 通常为暂停一整拍
+            print("第" + str(current_beat) + "拍：暂停，持续时间为" + str(note_duration) + " 秒。")
             buzzer.freq(50000)
             time.sleep(beat_duration)
-
-        current_beat += 1
+            current_beat += 1
 
     print("播放结束。")
     buzzer.freq(50000)
