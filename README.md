@@ -11,7 +11,7 @@
 2. 将 MicroPython 固件烧录到树莓派 Pico 上
 3. 将 `main.py` 文件复制到树莓派 Pico 的根目录下
 4. 修改 `main.py` 文件中引脚的定义等，以适配你的硬件
-5. 从 [Open Sequencer](https://opensequencer.net) 复制粘贴你想要播放的音乐的代码（部分不可行）
+5. 从 [Online Sequencer](https://onlinesequencer.net) 复制粘贴你想要播放的音乐的代码（部分不可行）
 
 ## 其他
 
